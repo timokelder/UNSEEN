@@ -1,0 +1,23 @@
+Package: UNSEEN
+Type: Package
+Title: Evaluate Large ensemble simulations
+Version: 0.1.0
+Author: Timo Kelder
+Maintainer: Timo Kelder <t.kelder@lboro.ac.uk>
+Description: This package provides easy evaluation and visualisation
+    of the UNSEEN method. There are three tests included: The ensemble member
+    independe test, the model stability test and the model fidelity test. The tests
+    are designed to work on the UNSEEN ensemble generated from the SEAS5 hindcast, 
+    as part of a workflow to assess extremes beyond the observed record for the 
+    ECMWF Summer of Weather Code (ESoWC).
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.0
+Imports: 
+    ggplot2
+Suggests: 
+    testthat,
+    vdiffr
+Depends: 
+    R (>= 2.10)
