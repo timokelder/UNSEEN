@@ -49,7 +49,7 @@ Model_stability_density <- function(ensemble, var_name = "tprate", ld_name = "le
 #' @param ensemble The UNSEEN ensemble. This function expects an dataframe with variables leadtime, precipitation.
 #' @param var_name The column name containing the variable to be analyzed. Defaults to "tprate".
 #' @param ld_name The column name containing the leadtimes. Defaults to "leadtime".
-#' @param lab The x-label. Defaults to the variable name (var_name).
+#' @param lab The y-label. Defaults to the variable name (var_name).
 #'
 #' @return a plot with the empirical return values of the pooled ensemble including confidence intervals.
 #' Individual lead times are plotted on top.
@@ -111,6 +111,18 @@ Model_stability_boot <- function(ensemble, var_name = "tprate", ld_name = "leadt
   return(p2)
 }
 
+#' Test the model stability: It plots the output of 1. Model_stability_density(): a density plot and 2. Model_stability_boot(): an empirical extreme value plot
+#'
+#' @param ensemble The UNSEEN ensemble. This function expects an dataframe with variables leadtime, precipitation.
+#' @param var_name The column name containing the variable to be analyzed. Defaults to "tprate".
+#' @param ld_name The column name containing the leadtimes. Defaults to "leadtime".
+#' @param lab The label. Defaults to the variable name (var_name).
+#'
+#' @return a plot with the empirical return values of the pooled ensemble including confidence intervals.
+#' Individual lead times are plotted on top.
+#' @source Evaluation explaned in more detail in Kelder et al. 2020
+#' @source Colorblind friendly palette  http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/#a-colorblind-friendly-palette
+#' @export
 stability_test <- function(ensemble, var_name = "tprate", ld_name = "leadtime", lab = var_name) {
   #combine plots from function 1 and 2
   p1 <- Model_stability_density(ensemble = ensemble, var_name = var_name, ld_name = ld_name, lab = lab)
