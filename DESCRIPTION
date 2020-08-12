@@ -19,7 +19,8 @@ Imports:
     stats,
     magrittr,
     dplyr,
-    ggpubr
+    ggpubr,
+    moments
 Suggests: 
     testthat,
     vdiffr

@@ -32,3 +32,6 @@ Individual lead times are plotted on top.
 \description{
 Test the model stability: It plots the output of 1. Model_stability_density(): a density plot and 2. Model_stability_boot(): an empirical extreme value plot
 }
+\seealso{
+[Model_stability_density()] [Model_stability_boot()]d
+}

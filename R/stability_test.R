@@ -120,6 +120,7 @@ Model_stability_boot <- function(ensemble, var_name = "tprate", ld_name = "leadt
 #'
 #' @return a plot with the empirical return values of the pooled ensemble including confidence intervals.
 #' Individual lead times are plotted on top.
+#' @seealso [Model_stability_density()] [Model_stability_boot()]d
 #' @source Evaluation explaned in more detail in Kelder et al. 2020
 #' @source Colorblind friendly palette  http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/#a-colorblind-friendly-palette
 #' @export
