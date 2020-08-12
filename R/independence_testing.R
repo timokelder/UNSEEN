@@ -71,7 +71,7 @@ independence_test <- function(ensemble, n_ensembles = 25, n_lds = 5, var_name = 
                                       ymin = `2.5%`,ymax=`97.5%`,
                                       group = Boxstat),
                          fill="grey",
-                         alpha="0.4") +
+                         alpha=0.4) +
     ggplot2::theme_classic() +
     ggplot2::ylab(bquote("Spearman" ~ rho))
 
