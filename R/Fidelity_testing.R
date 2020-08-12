@@ -68,7 +68,7 @@ plot_hist_combined <- function(bootstrapped_ens, bootstrapped_ensratio, obs, fun
 #' @return plots showing the bootstrapped tests of the mean, sd, skewness and kurtosis
 #' @source Evaluation explaned in more detail in Kelder et al. 2020
 #' @export
-Fidelity_test <- function(obs, ensemble, fontsize = 11, biascor = FALSE) {
+fidelity_test <- function(obs, ensemble, fontsize = 11, biascor = FALSE) {
   if (!is.numeric(obs)) {
     stop("Fidelity_test: obs should be numeric. This function expects a vector, i.e. dataframe$variable.")
   }
