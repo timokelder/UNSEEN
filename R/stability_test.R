@@ -56,7 +56,7 @@ Model_stability_density <- function(ensemble, var_name = "tprate", ld_name = "le
 #' @source Evaluation explaned in more detail in Kelder et al. 2020
 #' @source Colorblind friendly palette  http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/#a-colorblind-friendly-palette
 #' @export
-Model_stability_boot <- function(ensemble, var_name = "tprate", ld_name = "leadtime", lab = var_name) {
+Model_stability_boot <- function(ensemble, var_name = "tprate", ld_name = "leadtime", lab = var_name, ...) {
   #Define necessary global variables
   ci_2.5 <- ci_97.5 <- quantiles_all <- rps_all <- NULL
 
@@ -72,18 +72,26 @@ Model_stability_boot <- function(ensemble, var_name = "tprate", ld_name = "leadt
   rps <- ensemble_length / 1:ensemble_length # The return periods for the entire ensemble of 4,375‬ years
   rps_ld <- leadtime_length / 1:leadtime_length # The return periods for the ensemble split up into 5 leadtimes, 875 years
 
-  Rvs <- apply(bootstrapped_array, MARGIN = 2, FUN = stats::quantile, probs = 1 - 1 / (rps)) # apply the function to each of the 10.000 series
+  Rvs <- apply(bootstrapped_array,
+               MARGIN = 2,
+               FUN = stats::quantile,
+               probs = 1 - 1 / (rps),
+               na.rm = TRUE) # apply the function to each of the 10.000 series
 
   # calculate the lower and upper interval from the 10.000 values for each quantile.
-  ci_rvs <- apply(Rvs, MARGIN = 1, FUN = stats::quantile, probs = c(0.025, 0.975))
+  ci_rvs <- apply(Rvs,
+                  MARGIN = 1,
+                  FUN = stats::quantile,
+                  probs = c(0.025, 0.975),
+                  na.rm = TRUE)
 
   ## Create a dataframe including the return periods, empirical values and confidence intervals
   df_quantiles <- ensemble %>%
-    dplyr::mutate(rps_all = rps, quantiles_all = stats::quantile(!!as.name(var_name), 1 - 1 / (rps)))
+    dplyr::mutate(rps_all = rps, quantiles_all = stats::quantile(!!as.name(var_name), 1 - 1 / (rps), na.rm = TRUE))
 
   df_quantiles <- df_quantiles %>%
     dplyr::group_by(!!as.name(ld_name)) %>%
-    dplyr::mutate(rps_ld = rps_ld, quantiles_ld = stats::quantile(!!as.name(var_name), 1 - 1 / (rps_ld)))
+    dplyr::mutate(rps_ld = rps_ld, quantiles_ld = stats::quantile(!!as.name(var_name), 1 - 1 / (rps_ld), na.rm = TRUE))
 
   df_quantiles$ci_2.5 <- ci_rvs[1, ]
   df_quantiles$ci_97.5 <- ci_rvs[2, ]
@@ -124,7 +132,7 @@ Model_stability_boot <- function(ensemble, var_name = "tprate", ld_name = "leadt
 #' @source Evaluation explaned in more detail in Kelder et al. 2020
 #' @source Colorblind friendly palette  http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/#a-colorblind-friendly-palette
 #' @export
-stability_test <- function(ensemble, var_name = "tprate", ld_name = "leadtime", lab = var_name) {
+stability_test <- function(ensemble, var_name = "tprate", ld_name = "leadtime", lab = var_name, ...) {
   #combine plots from function 1 and 2
   p1 <- Model_stability_density(ensemble = ensemble, var_name = var_name, ld_name = ld_name, lab = lab)
   p2 <- Model_stability_boot(ensemble = ensemble, var_name = var_name, ld_name = ld_name, lab = lab)
