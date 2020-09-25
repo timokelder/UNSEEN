@@ -7,12 +7,14 @@
 Evaluation explaned in more detail in Kelder et al. 2020
 }
 \usage{
-fidelity_test(obs, ensemble, fontsize = 11, biascor = FALSE)
+fidelity_test(obs, ensemble, units = "mm/day", fontsize = 11, biascor = FALSE)
 }
 \arguments{
 \item{obs}{The observations. This function expects a vector, i.e. dataframe$variable.}
 
 \item{ensemble}{The UNSEEN ensemble. This function expects a vector, i.e. dataframe$variable}
+
+\item{units}{units label. Defaults to "mm/day".}
 
 \item{fontsize}{The font size. Defaults to 11.}
 
