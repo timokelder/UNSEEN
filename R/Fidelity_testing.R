@@ -12,7 +12,7 @@
 plot_hist_combined <- function(bootstrapped_ens, bootstrapped_ensratio, obs, fun, main, units, fontsize, biascor = FALSE) {
   bootstrapped_fun <- apply(bootstrapped_ens, MARGIN = 2, FUN = fun)
   if (biascor == TRUE) {
-    bootstrapped_fun_ratio <- apply(bootstrapped_ensratio, MARGIN = 2, FUN = fun, na.rm = TRUE)
+    bootstrapped_fun_ratio <- apply(bootstrapped_ensratio, MARGIN = 2, FUN = fun, na.rm = FALSE)
   }
 
   p <- ggplot2::ggplot() +
@@ -23,7 +23,7 @@ plot_hist_combined <- function(bootstrapped_ens, bootstrapped_ensratio, obs, fun
     ) +
     ggplot2::geom_vline(ggplot2::aes(xintercept = stats::quantile(bootstrapped_fun,
       probs = c(0.025, 0.975),
-      na.rm = TRUE
+      na.rm = FALSE
     )),
     color = "black", linetype = "dashed", size = 1
     )
@@ -34,7 +34,7 @@ plot_hist_combined <- function(bootstrapped_ens, bootstrapped_ensratio, obs, fun
                                      ) +
       ggplot2::geom_vline(ggplot2::aes(xintercept = stats::quantile(bootstrapped_fun_ratio,
                                                                     probs = c(0.025, 0.975),
-                                                                    na.rm = TRUE
+                                                                    na.rm = FALSE
                                                                     )),
                           color = "orange", linetype = "dashed", size = 1
                           )
