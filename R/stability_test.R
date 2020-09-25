@@ -56,7 +56,7 @@ Model_stability_density <- function(ensemble, var_name = "tprate", ld_name = "le
 #' @source Evaluation explaned in more detail in Kelder et al. 2020
 #' @source Colorblind friendly palette  http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/#a-colorblind-friendly-palette
 #' @export
-Model_stability_boot <- function(ensemble, var_name = "tprate", ld_name = "leadtime", lab = var_name, ...) {
+Model_stability_boot <- function(ensemble, var_name = "tprate", ld_name = "leadtime", lab = var_name) {
   #Define necessary global variables
   ci_2.5 <- ci_97.5 <- quantiles_all <- rps_all <- NULL
 
@@ -132,7 +132,7 @@ Model_stability_boot <- function(ensemble, var_name = "tprate", ld_name = "leadt
 #' @source Evaluation explaned in more detail in Kelder et al. 2020
 #' @source Colorblind friendly palette  http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/#a-colorblind-friendly-palette
 #' @export
-stability_test <- function(ensemble, var_name = "tprate", ld_name = "leadtime", lab = var_name, ...) {
+stability_test <- function(ensemble, var_name = "tprate", ld_name = "leadtime", lab = var_name) {
   #combine plots from function 1 and 2
   p1 <- Model_stability_density(ensemble = ensemble, var_name = var_name, ld_name = ld_name, lab = lab)
   p2 <- Model_stability_boot(ensemble = ensemble, var_name = var_name, ld_name = ld_name, lab = lab)
