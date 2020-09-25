@@ -76,22 +76,22 @@ Model_stability_boot <- function(ensemble, var_name = "tprate", ld_name = "leadt
                MARGIN = 2,
                FUN = stats::quantile,
                probs = 1 - 1 / (rps),
-               na.rm = TRUE) # apply the function to each of the 10.000 series
+               na.rm = FALSE) # apply the function to each of the 10.000 series
 
   # calculate the lower and upper interval from the 10.000 values for each quantile.
   ci_rvs <- apply(Rvs,
                   MARGIN = 1,
                   FUN = stats::quantile,
                   probs = c(0.025, 0.975),
-                  na.rm = TRUE)
+                  na.rm = FALSE)
 
   ## Create a dataframe including the return periods, empirical values and confidence intervals
   df_quantiles <- ensemble %>%
-    dplyr::mutate(rps_all = rps, quantiles_all = stats::quantile(!!as.name(var_name), 1 - 1 / (rps), na.rm = TRUE))
+    dplyr::mutate(rps_all = rps, quantiles_all = stats::quantile(!!as.name(var_name), 1 - 1 / (rps), na.rm = FALSE))
 
   df_quantiles <- df_quantiles %>%
     dplyr::group_by(!!as.name(ld_name)) %>%
-    dplyr::mutate(rps_ld = rps_ld, quantiles_ld = stats::quantile(!!as.name(var_name), 1 - 1 / (rps_ld), na.rm = TRUE))
+    dplyr::mutate(rps_ld = rps_ld, quantiles_ld = stats::quantile(!!as.name(var_name), 1 - 1 / (rps_ld), na.rm = FALSE))
 
   df_quantiles$ci_2.5 <- ci_rvs[1, ]
   df_quantiles$ci_97.5 <- ci_rvs[2, ]
