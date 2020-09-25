@@ -12,7 +12,7 @@
 plot_hist_combined <- function(bootstrapped_ens, bootstrapped_ensratio, obs, fun, main, units, fontsize, biascor = FALSE) {
   bootstrapped_fun <- apply(bootstrapped_ens, MARGIN = 2, FUN = fun)
   if (biascor == TRUE) {
-    bootstrapped_fun_ratio <- apply(bootstrapped_ensratio, MARGIN = 2, FUN = fun)
+    bootstrapped_fun_ratio <- apply(bootstrapped_ensratio, MARGIN = 2, FUN = fun, na.rm = TRUE)
   }
 
   p <- ggplot2::ggplot() +
@@ -22,7 +22,8 @@ plot_hist_combined <- function(bootstrapped_ens, bootstrapped_ensratio, obs, fun
       bins = 30
     ) +
     ggplot2::geom_vline(ggplot2::aes(xintercept = stats::quantile(bootstrapped_fun,
-      probs = c(0.025, 0.975)
+      probs = c(0.025, 0.975),
+      na.rm = TRUE
     )),
     color = "black", linetype = "dashed", size = 1
     )
@@ -32,7 +33,8 @@ plot_hist_combined <- function(bootstrapped_ens, bootstrapped_ensratio, obs, fun
                                      alpha = 0.5, bins = 30
                                      ) +
       ggplot2::geom_vline(ggplot2::aes(xintercept = stats::quantile(bootstrapped_fun_ratio,
-                                                                    probs = c(0.025, 0.975)
+                                                                    probs = c(0.025, 0.975),
+                                                                    na.rm = TRUE
                                                                     )),
                           color = "orange", linetype = "dashed", size = 1
                           )
@@ -62,13 +64,14 @@ plot_hist_combined <- function(bootstrapped_ens, bootstrapped_ensratio, obs, fun
 #'
 #' @param obs     The observations. This function expects a vector, i.e. dataframe$variable.
 #' @param ensemble The UNSEEN ensemble. This function expects a vector, i.e. dataframe$variable
+#' @param units units label. Defaults to "mm/day".
 #' @param fontsize The font size. Defaults to 11.
 #' @param biascor Boolean. Do you want to apply a mean-bias correction?
-#'
+
 #' @return plots showing the bootstrapped tests of the mean, sd, skewness and kurtosis
 #' @source Evaluation explaned in more detail in Kelder et al. 2020
 #' @export
-fidelity_test <- function(obs, ensemble, fontsize = 11, biascor = FALSE) {
+fidelity_test <- function(obs, ensemble, units = "mm/day", fontsize = 11, biascor = FALSE) {
   if (!is.numeric(obs)) {
     stop("Fidelity_test: obs should be numeric. This function expects a vector, i.e. dataframe$variable.")
   }
@@ -86,8 +89,8 @@ fidelity_test <- function(obs, ensemble, fontsize = 11, biascor = FALSE) {
     bootstrapped_ensratio <- array(bootstrapped_ensratio, dim = c(length(obs), 10000)) # Creates an array with 10.000 series of 35 values
   }
 
-  p1_comb <- plot_hist_combined(bootstrapped_ens, bootstrapped_ensratio, obs, fun = mean, main = "Mean", units = "mm/day", fontsize = fontsize, biascor = biascor) # Mean
-  p2_comb <- plot_hist_combined(bootstrapped_ens, bootstrapped_ensratio, obs, fun = stats::sd, main = "Standard deviation", units = "mm/day", fontsize = fontsize, biascor = biascor) # Standard Deviation
+  p1_comb <- plot_hist_combined(bootstrapped_ens, bootstrapped_ensratio, obs, fun = mean, main = "Mean", units = units, fontsize = fontsize, biascor = biascor) # Mean
+  p2_comb <- plot_hist_combined(bootstrapped_ens, bootstrapped_ensratio, obs, fun = stats::sd, main = "Standard deviation", units = units, fontsize = fontsize, biascor = biascor) # Standard Deviation
   p3_comb <- plot_hist_combined(bootstrapped_ens, bootstrapped_ensratio, obs, fun = moments::skewness, main = "Skewness", units = "-", fontsize = fontsize, biascor = biascor) # Skewness
   p4_comb <- plot_hist_combined(bootstrapped_ens, bootstrapped_ensratio, obs, fun = moments::kurtosis, main = "Kurtosis", units = "-", fontsize = fontsize, biascor = biascor) # Kurtosis
 
