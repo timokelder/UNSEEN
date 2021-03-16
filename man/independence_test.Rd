@@ -8,6 +8,7 @@ independence_test(
   ensemble,
   n_ensembles = 25,
   n_lds = 5,
+  detrend = TRUE,
   var_name = "tprate",
   ens_name = "number",
   ld_name = "leadtime"
@@ -21,6 +22,8 @@ It expects that the first member is 0 (as used in CDS) and that the first lead t
 \item{n_ensembles}{The number of ensemble members (not including pooled leadtimes) in the UNSEEN ensemble. Defaults to 25.}
 
 \item{n_lds}{The number of leadtimes in the UNSEEN ensemble. Defaults to 5.}
+
+\item{detrend}{Should the trend in the data be removed? By default, the data is detrended by differencing.}
 
 \item{var_name}{The column name containing the variable to be analyzed. Defaults to "tprate".}
 

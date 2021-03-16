@@ -8,13 +8,14 @@
 #' @param var_name The column name containing the variable to be analyzed. Defaults to "tprate".
 #' @param ens_name The column name containing the ensemble members. Defaults to "number".
 #' @param ld_name The column name containing the leadtimes. Defaults to "leadtime".
+#' @param detrend Should the trend in the data be removed? By default, the data is detrended by differencing.
 #' @return A plot showing the boxplot of the pairwise correlations for each leadtime. See Kelder et al. 2020.
 #' @export
 #' @section Warning:
 #' The confidence intervals are based on a bootstrap test with n_ensembles = 25. These are now pre-computed and therefore
 #' will not give the right CI bounds for different ensemble sizes. The bootstrapping test is included in the documentation in data_raw, but
 #' might be included in the future as a function of n_ensembles and n_lds.
-independence_test <- function(ensemble, n_ensembles = 25, n_lds = 5, var_name = "tprate", ens_name = "number", ld_name = "leadtime") {
+independence_test <- function(ensemble, n_ensembles = 25, n_lds = 5, detrend = TRUE, var_name = "tprate", ens_name = "number", ld_name = "leadtime") {
   `2.5%` <- `97.5%` <- Boxstat <- Freq <- leadtime <- x <- NULL
 
 
@@ -36,11 +37,21 @@ independence_test <- function(ensemble, n_ensembles = 25, n_lds = 5, var_name = 
           predictant <- ensemble[[var_name]][ensemble[[ens_name]] == mbr1 & ensemble[[ld_name]] == ld]
           predictor <- ensemble[[var_name]][ensemble[[ens_name]] == mbr2 & ensemble[[ld_name]] == ld]
 
-          correlations_lds[as.character(mbr1), as.character(mbr2), as.character(ld)] <- stats::cor(
-            x = predictant,
-            y = predictor,
-            method = "spearman"
-          )
+          if (detrend == TRUE) {
+            correlations_lds[as.character(mbr1), as.character(mbr2), as.character(ld)] <- stats::cor(
+              x = diff(predictant, lag = 1, differences = 1),
+              y = diff(predictor, lag = 1, differences = 1),
+              method = "spearman"
+            )
+          } else{
+            correlations_lds[as.character(mbr1), as.character(mbr2), as.character(ld)] <- stats::cor(
+              x = predictant,
+              y = predictor,
+              method = "spearman"
+            )
+          }
+
+
         }
       }
     }
@@ -73,7 +84,8 @@ independence_test <- function(ensemble, n_ensembles = 25, n_lds = 5, var_name = 
                          fill="grey",
                          alpha=0.4) +
     ggplot2::theme_classic() +
-    ggplot2::ylab(bquote("Spearman" ~ rho))
+    ggplot2::ylab(bquote("Spearman" ~ rho))+
+    ggplot2::ylim(c(-1,1))
 
 
   # The old plot with base R
