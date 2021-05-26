@@ -13,7 +13,8 @@ Model_stability_boot(
   ensemble,
   var_name = "tprate",
   ld_name = "leadtime",
-  lab = var_name
+  lab = var_name,
+  fontsize = 11
 )
 }
 \arguments{
@@ -24,6 +25,8 @@ Model_stability_boot(
 \item{ld_name}{The column name containing the leadtimes. Defaults to "leadtime".}
 
 \item{lab}{The y-label. Defaults to the variable name (var_name).}
+
+\item{fontsize}{The font size. Defaults to 11.}
 }
 \value{
 a plot with the empirical return values of the pooled ensemble including confidence intervals.

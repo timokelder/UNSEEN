@@ -13,7 +13,9 @@ stability_test(
   ensemble,
   var_name = "tprate",
   ld_name = "leadtime",
-  lab = var_name
+  lab = var_name,
+  fontsize = 11,
+  panel_labels = c("a", "b")
 )
 }
 \arguments{
@@ -23,7 +25,11 @@ stability_test(
 
 \item{ld_name}{The column name containing the leadtimes. Defaults to "leadtime".}
 
-\item{lab}{The label. Defaults to the variable name (var_name).}
+\item{lab}{The variable name plotted as x-label (first panel) and y-label (second panel). Defaults to the variable name (var_name).}
+
+\item{fontsize}{The font size. Defaults to 11.}
+
+\item{panel_labels}{The panel labels. Defaults to c("a", "b").}
 }
 \value{
 a plot with the empirical return values of the pooled ensemble including confidence intervals.

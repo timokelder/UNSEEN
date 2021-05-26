@@ -13,7 +13,8 @@ Model_stability_density(
   ensemble,
   var_name = "tprate",
   ld_name = "leadtime",
-  lab = var_name
+  lab = var_name,
+  fontsize = 11
 )
 }
 \arguments{
@@ -24,6 +25,8 @@ Model_stability_density(
 \item{ld_name}{The column name containing the leadtimes. Defaults to "leadtime".}
 
 \item{lab}{The x-label. Defaults to the variable name (var_name).}
+
+\item{fontsize}{The font size. Defaults to 11.}
 }
 \value{
 a plot showing the empirical probability density distribution for each leadtime
