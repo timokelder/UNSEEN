@@ -5,11 +5,13 @@
 #' @param obs THe observations
 #' @param fun Function, such as mean, sd, skewness and kurtosis
 #' @param main The title
+#' @param ylab The Y-label
+#' @param yticks Boolean. Whether or not to plot y-axis labels and ticks.
 #' @param units units label
 #' @param fontsize the font size
 #' @param biascor Boolean. Do you want to apply a mean-bias correction?
 #' @noRd
-plot_hist_combined <- function(bootstrapped_ens, bootstrapped_ensratio, obs, fun, main, units, fontsize, biascor = FALSE) {
+plot_hist_combined <- function(bootstrapped_ens, bootstrapped_ensratio, obs, fun, main, ylab = "Number of series", yticks = TRUE, units, fontsize, biascor = FALSE) {
   bootstrapped_fun <- apply(bootstrapped_ens, MARGIN = 2, FUN = fun)
   if (biascor == TRUE) {
     bootstrapped_fun_ratio <- apply(bootstrapped_ensratio, MARGIN = 2, FUN = fun, na.rm = FALSE)
@@ -42,12 +44,19 @@ plot_hist_combined <- function(bootstrapped_ens, bootstrapped_ensratio, obs, fun
   p <- p + ggplot2::geom_vline(ggplot2::aes(xintercept = fun(obs)),
                                color = "blue", size = 2
                                ) +
-    ggplot2::labs(title = main, y = "Number of bootstrapped series", x = paste0(" (", units, ")")) +
+    ggplot2::labs(title = main, y = ylab, x = paste0(" (", units, ")")) +
     ggplot2::theme_classic() +
     ggplot2::theme(
       text = ggplot2::element_text(size = fontsize),
       axis.text = ggplot2::element_text(size = fontsize)
-    )
+      )
+  if (yticks == FALSE){
+    p <- p + ggplot2::theme(
+      axis.text.y = ggplot2::element_blank(),
+      axis.ticks.y = ggplot2::element_blank()
+      )
+  }
+  return(p)
 }
 
 
@@ -65,13 +74,16 @@ plot_hist_combined <- function(bootstrapped_ens, bootstrapped_ensratio, obs, fun
 #' @param obs     The observations. This function expects a vector, i.e. dataframe$variable.
 #' @param ensemble The UNSEEN ensemble. This function expects a vector, i.e. dataframe$variable
 #' @param units units label. Defaults to "mm/day".
+#' @param ylab The y lable. Defaults to "Numer of series".
+#' @param yticks Boolean. Whether or not to plot y-axis labels and ticks.
 #' @param fontsize The font size. Defaults to 11.
 #' @param biascor Boolean. Do you want to apply a mean-bias correction?
+#' @param panel_labels The panel labels. Defaults to c("a", "b", "c", "d").
 
 #' @return plots showing the bootstrapped tests of the mean, sd, skewness and kurtosis
 #' @source Evaluation explaned in more detail in Kelder et al. 2020
 #' @export
-fidelity_test <- function(obs, ensemble, units = "mm/day", fontsize = 11, biascor = FALSE) {
+fidelity_test <- function(obs, ensemble, units = "mm/day", ylab = 'Number of series',yticks = TRUE, fontsize = 11, biascor = FALSE, panel_labels = c("a", "b", "c", "d")) {
   if (!is.numeric(obs)) {
     stop("Fidelity_test: obs should be numeric. This function expects a vector, i.e. dataframe$variable.")
   }
@@ -89,13 +101,13 @@ fidelity_test <- function(obs, ensemble, units = "mm/day", fontsize = 11, biasco
     bootstrapped_ensratio <- array(bootstrapped_ensratio, dim = c(length(obs), 10000)) # Creates an array with 10.000 series of 35 values
   }
 
-  p1_comb <- plot_hist_combined(bootstrapped_ens, bootstrapped_ensratio, obs, fun = mean, main = "Mean", units = units, fontsize = fontsize, biascor = biascor) # Mean
-  p2_comb <- plot_hist_combined(bootstrapped_ens, bootstrapped_ensratio, obs, fun = stats::sd, main = "Standard deviation", units = units, fontsize = fontsize, biascor = biascor) # Standard Deviation
-  p3_comb <- plot_hist_combined(bootstrapped_ens, bootstrapped_ensratio, obs, fun = moments::skewness, main = "Skewness", units = "-", fontsize = fontsize, biascor = biascor) # Skewness
-  p4_comb <- plot_hist_combined(bootstrapped_ens, bootstrapped_ensratio, obs, fun = moments::kurtosis, main = "Kurtosis", units = "-", fontsize = fontsize, biascor = biascor) # Kurtosis
+  p1_comb <- plot_hist_combined(bootstrapped_ens, bootstrapped_ensratio, obs, fun = mean, main = "Mean", units = units, ylab = ylab, yticks = yticks, fontsize = fontsize, biascor = biascor) # Mean
+  p2_comb <- plot_hist_combined(bootstrapped_ens, bootstrapped_ensratio, obs, fun = stats::sd, main = "Standard deviation", units = units, ylab = ylab, yticks = yticks, fontsize = fontsize, biascor = biascor) # Standard Deviation
+  p3_comb <- plot_hist_combined(bootstrapped_ens, bootstrapped_ensratio, obs, fun = moments::skewness, main = "Skewness", units = "-", ylab = ylab, yticks = yticks, fontsize = fontsize, biascor = biascor) # Skewness
+  p4_comb <- plot_hist_combined(bootstrapped_ens, bootstrapped_ensratio, obs, fun = moments::kurtosis, main = "Kurtosis", units = "-", ylab = ylab, yticks = yticks, fontsize = fontsize, biascor = biascor) # Kurtosis
 
   ggpubr::ggarrange(p1_comb, p2_comb, p3_comb, p4_comb,
-    labels = c("a", "b", "c", "d"),
+    labels = panel_labels,
     font.label = list(size = fontsize, color = "black", face = "bold", family = NULL),
     ncol = 2, nrow = 2
   )
