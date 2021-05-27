@@ -1,3 +1,4 @@
+[![DOI](https://zenodo.org/badge/280199921.svg)](https://zenodo.org/badge/latestdoi/280199921)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
